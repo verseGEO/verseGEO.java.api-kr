@@ -29,6 +29,7 @@ verseGEO Blockchain Platform은 지속적으로 발전하고 있는 블록체인
 |처리결과 전송|verseGEO|제휴사|Exchange 요청 및 출금 요청 전문에 대한 수행 결과의 처리내역 전송|Async|
 
 
+
 ## 1. Exchange Rate API (제휴사 → verseB)
 
 Exchange Rate 조회 API는 게임 또는 서비스의 Item, Point등에 대한 Play Token 변환 전 반드시 호출해 환율을 참조해야 합니다. Exchange Rate 조회를 통해 참조된 환율은 후속 API인 “Exchange 요청 API”에 적용되어 Play Token으로 전환 가능합니다.
