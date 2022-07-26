@@ -220,21 +220,36 @@ public class APITest {
 			}
 
 			// 실제 수신 처리 수행 Start
-			//modelAndView = execute(context, mJsonReq);
+			String			errCd				= "0000";
 			String			sSign				= HmacSha256Util.unSignFromJSONStr(sIn, key);
 			if ("".equals(sSign)) {
 				// 에러 처리
+				errCd	= "8003";
 			}
-			// 채널 DB 업데이트 처리
-			System.out.println("DB Transaction Status Update");
+			if ("confirm".equals(mJsonReq.get("status"))) {
+				// 채널 DB 업데이트 처리
+				System.out.println("DB Transaction Status Update");
+			} else {
+				errCd	= "9999";
+			}
 
-			// 응답 전송 처리
 			HashMap<String, String> hmOut		= new HashMap<String, String>();
-			hmOut.put("merchantInformation.merchantId",		(String) mJsonReq.get("merchantInformation.merchantId"));
-			hmOut.put("merchantInformation.merchantSiteId",	(String) mJsonReq.get("merchantInformation.merchantSiteId"));
-			hmOut.put("clientReferenceInformation.code",	(String) mJsonReq.get("clientReferenceInformation.code"));
-			hmOut.put("customerId",							(String) mJsonReq.get("customerId"));
-			hmOut.put("status",								"SUCCESS");
+			if ("0000".equals(errCd)) {
+				hmOut.put("merchantInformation.merchantId",		(String) mJsonReq.get("merchantInformation.merchantId"));
+				hmOut.put("merchantInformation.merchantSiteId",	(String) mJsonReq.get("merchantInformation.merchantSiteId"));
+				hmOut.put("clientReferenceInformation.code",	(String) mJsonReq.get("clientReferenceInformation.code"));
+				hmOut.put("customerId",							(String) mJsonReq.get("customerId"));
+				hmOut.put("status",								"SUCCESS");
+			} else {
+				hmOut.put("merchantInformation.merchantId",		(String) mJsonReq.get("merchantInformation.merchantId"));
+				hmOut.put("merchantInformation.merchantSiteId",	(String) mJsonReq.get("merchantInformation.merchantSiteId"));
+				hmOut.put("clientReferenceInformation.code",	(String) mJsonReq.get("clientReferenceInformation.code"));
+				hmOut.put("customerId",							(String) mJsonReq.get("customerId"));
+				hmOut.put("status",								"DECLINED");
+				hmOut.put("errorInformation.errCd",				errCd);
+				hmOut.put("errorInformation.reason",			"ERROR");
+			}
+			// 응답 전송 처리
 			JSONObject		oSendJson			= JsonUtil.makeJsonFromMap(hmOut);
 			String			sSendJson			= oSendJson.toString();
 			sSendJson							= HmacSha256Util.signFromJSONStr(sSendJson, key);
