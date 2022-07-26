@@ -19,7 +19,7 @@ import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import sun.net.www.protocol.http.HttpURLConnection;
 
-public class TestRun {
+public class APITest {
 
 	protected static final String VIEW_NAME_JSON				=	"common/jsonview";
 
